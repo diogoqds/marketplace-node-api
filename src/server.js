@@ -36,7 +36,7 @@ class App {
       }
 
       if (process.env.NODE_ENV !== 'production') {
-        const youch = new Youch(err)
+        const youch = new Youch(err, req)
 
         return res.json(await youch.toJSON())
       }
