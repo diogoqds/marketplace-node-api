@@ -1,5 +1,6 @@
 const { Ad, User } = require('../models')
-const Mail = require('../services/Mail')
+const Queue = require('../services/Queue')
+const { PurchaseMail } = require('../jobs')
 
 class PurchaseController {
   async store (req, res) {
@@ -8,13 +9,12 @@ class PurchaseController {
       const purchaseAd = await Ad.findById(ad).populate('author')
       const user = await User.findById(req.userId)
 
-      await Mail.sendMail({
-        from: `${user.name} <${user.email}>'`,
-        to: purchaseAd.author.email,
-        subject: `Solicitação de compra: ${purchaseAd.title}`,
-        template: 'purchase',
-        context: { user, content, ad: purchaseAd }
-      })
+      Queue.create(PurchaseMail.key, {
+        ad: purchaseAd,
+        user,
+        content
+      }).save()
+
       return res.json()
     } catch (error) {
       return res.status(400).json(error)
