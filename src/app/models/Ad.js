@@ -19,6 +19,11 @@ const AdSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
+  available: {
+    type: Boolean,
+    required: true,
+    default: true
+  },
   createdAt: {
     type: Date,
     default: Date.now
