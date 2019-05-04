@@ -1,4 +1,4 @@
 module.exports = {
   expiresIn: 86400,
-  secret: 'gonode'
+  secret: process.env.APP_SECRET
 }
